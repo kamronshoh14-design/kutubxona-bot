@@ -1,8 +1,7 @@
 // bot.js faylida:
 
 const CONFIG = {
-    //!!! Tokenni Environment Variables (Muhit o'zgaruvchilari) dan olish
-    TOKEN: process.env.BOT_TOKEN || '8318442346:AAEXWW5F-maMr8KcwEOvoMLxuHj3lEDCWOs', 
+  TOKEN: process.env.BOT_TOKEN // Bu Render'dagi BOT_TOKEN nomli qiymatni oladi
     
     // Mutlaq yo'l o'zgarmaydi, chunki u hali ham 'books/' papkasini qidiradi
     BOOK_PATH: path.join(__dirname, 'books/'), 
