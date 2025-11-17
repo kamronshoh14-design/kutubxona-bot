@@ -1,7 +1,9 @@
-// bot.js faylida:
-
+// src/config.js
+// ...
 const CONFIG = {
-  TOKEN: process.env.BOT_TOKEN // Bu Render'dagi BOT_TOKEN nomli qiymatni oladi
+    TOKEN: process.env.BOT_TOKEN, // TO'G'RI
+    // ...
+
     
     // Mutlaq yo'l o'zgarmaydi, chunki u hali ham 'books/' papkasini qidiradi
     BOOK_PATH: path.join(__dirname, 'books/'), 
