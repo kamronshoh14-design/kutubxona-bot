@@ -4,7 +4,8 @@ const path = require('path');
 
 // ================= CONFIG =================
 const CONFIG = {
-    TOKEN: '8318442346:AAEXWW5F-maMr8KcwEOvoMLxuHj3lEDCWOs', // Bu yerga BotFather tokenini yozing
+    // 🛑 TOKEN QATORINI TO'G'RILANG:
+    TOKEN: process.env.BOT_TOKEN, 
     BOOK_PATH: path.join(__dirname, 'books'),
     LANGUAGES: { uz: 'O‘zbekcha', ru: 'Русский', en: 'English' }
 };
@@ -98,4 +99,43 @@ bot.on('callback_query', async query => {
 
 bot.on('polling_error', error => console.error(error));
 
+
+// src/Bot.js fayliga qo'shiladi
+
+bot.on('channel_post', async (msg) => {
+    // 1. Kanal xabarlarini tinglash (channel_post)
+    
+    // 2. Agar xabar fayl (document) bo'lsa tekshiramiz
+    if (msg.document) {
+        
+        // 3. Agar fayl turi PDF bo'lsa tekshiramiz
+        if (msg.document.mime_type === 'application/pdf') {
+            
+            const file_id = msg.document.file_id;
+            const file_name = msg.document.file_name;
+            
+            // 4. Faylni Telegramdan olish uchun yo'lni olamiz
+            const file_link = await bot.getFileLink(file_id);
+            
+            // 5. Faylni saqlash yo'lini belgilaymiz (config.js dagi BOOKS papkasiga)
+            const destination_path = path.join(CONFIG.BOOK_PATH, file_name);
+
+            try {
+                // Faylni yuklab olamiz
+                const response = await fetch(file_link);
+                const buffer = await response.buffer();
+                
+                // Faylni BOOK_PATH ga saqlaymiz
+                fs.writeFileSync(destination_path, buffer);
+                
+                // Administratorga xabar berish (ixtiyoriy)
+                bot.sendMessage(msg.chat.id, `✅ Kitob saqlandi: ${file_name}`);
+                
+            } catch (error) {
+                console.error("Kitobni yuklashda xato:", error);
+                bot.sendMessage(msg.chat.id, `❌ Kitobni saqlashda xato yuz berdi!`);
+            }
+        }
+    }
+});
 console.log("Kutubxona AI Bot ishga tushdi...");
